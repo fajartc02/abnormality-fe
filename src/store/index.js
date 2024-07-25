@@ -6,7 +6,6 @@ import AbsensiModule from './AbsensiModule'
 import PlanKurasModule from './PlanKurasModule'
 import DashBoardToolModule from './DashBoardToolModule'
 
-import focusInputModule from './TMS/focusInput.module'
 import MasterDrawingModule from './MasterDrawingModule'
 import DeliveryModule from './Delivery.Module'
 import MasterMachineModule from './MasterMachine.module'
@@ -15,21 +14,55 @@ import SystemModule from './System.module'
 import MasterLineModule from './MasterLine.module'
 import KanbanFromGel from './KanbanFromGel.module'
 
+import focusInputModule from './TMS/focusInput.module'
+import TOOL_TYPESModule from './TMS/TOOL_TYPES.module'
+import TOOLSModule from './TMS/TOOLS.module'
+import METAModule from './TMS/META.module'
+import TOOL_STDModule from './TMS/TOOL_STD.module'
+import DISTRIBUTIONSModule from './TMS/DISTRIBUTIONS.module'
+import MACHINESModule from './TMS/MACHINES.module'
+import SYSTEMModule from './TMS/SYSTEM.module'
+import GRAPHModule from './TMS/GRAPH.module'
+
 export default createStore({
-  state: {
-    sidebarVisible: '',
-    sidebarUnfoldable: false,
-  },
-  mutations: {
-    toggleSidebar(state) {
-      state.sidebarVisible = !state.sidebarVisible
+    state: {
+        sidebarVisible: '',
+        sidebarUnfoldable: false,
     },
-    toggleUnfoldable(state) {
-      state.sidebarUnfoldable = !state.sidebarUnfoldable
+    mutations: {
+        toggleSidebar(state) {
+            state.sidebarVisible = !state.sidebarVisible
+        },
+        toggleUnfoldable(state) {
+            state.sidebarUnfoldable = !state.sidebarUnfoldable
+        },
+        updateSidebarVisible(state, payload) {
+            state.sidebarVisible = payload.value
+        },
     },
-    updateSidebarVisible(state, payload) {
-      state.sidebarVisible = payload.value
+    actions: {},
+    modules: {
+        EmployeeModule,
+        AbsensiModule,
+        mappingModule,
+        CoolantModule,
+        PlanKurasModule,
+        DashBoardToolModule,
+        MasterDrawingModule,
+        DeliveryModule,
+
+        focusInputModule,
+        TOOL_TYPESModule,
+        TOOLSModule,
+        METAModule,
+        TOOL_STDModule,
+        DISTRIBUTIONSModule,
+        GRAPHModule,
+
+        MACHINESModule,
+        SYSTEMModule,
     },
+
   },
   actions: {},
   modules: {

@@ -10,19 +10,20 @@
 
         <div class="input-group" style="width: 350px;">
           <span class="input-group-text">Scan QR</span>
-          <input id="qr-input" type="text" class="form-control" placeholder="Scan your tools" v-model="tool_id" />
+          <input id="qr-input" type="text" class="form-control" placeholder="Scan your tools"
+            v-model="search.tool_qr" />
           <CButton v-if="!GET_FOCUS_INPUT" type="button" color="secondary" variant="outline"
             @click="actionFocusToggle(true)">
             Scan
           </CButton>
-          <CButton v-else-if="GET_FOCUS_INPUT && tool_id != ''" type="button" color="secondary" variant="outline"
+          <CButton v-else-if="GET_FOCUS_INPUT && search.tool_qr != ''" type="button" color="secondary" variant="outline"
             @click="actionFocusToggle(false)">
             <CIcon icon="cilX" />
           </CButton>
         </div>
       </div>
     </div>
-    <CardToolStatus v-if="tool_id != ''" :is_footer="true" :location="location" />
+    <CardToolStatus v-if="search.tool_qr != ''" :is_footer="true" :location="location" />
     <PleaseScanQRTools v-else />
   </div>
 </template>
@@ -32,6 +33,7 @@ import CardToolStatus from '@/components/TMS/Cards/CardToolStatus.vue';
 
 import { mapGetters } from 'vuex';
 import { ACTION_FOCUS_INPUT, GET_FOCUS_INPUT } from '@/store/TMS/focusInput.module';
+import { ACTION_TOOL_DETAILS } from '@/store/TMS/TOOLS.module';
 
 export default {
   components: { PleaseScanQRTools, CardToolStatus },
@@ -39,7 +41,9 @@ export default {
   data() {
     return {
       is_focus: true,
-      tool_id: '',
+      search: {
+        tool_qr: '',
+      },
       location: 'Tool Regrinding',
       optsLocation: ['Tool Regrinding', 'Clean Room', 'Cam Shaft', 'Crank Shaft', 'Cylinder Head', 'Cylinder Block']
     }
@@ -51,6 +55,17 @@ export default {
     GET_FOCUS_INPUT() {
       console.log('GET_FOCUS_INPUT', this.GET_FOCUS_INPUT);
       this.focusToggle(this.GET_FOCUS_INPUT)
+    },
+    search: {
+      handler() {
+        if (this.search.tool_qr.length === 5)
+          this.$store.dispatch(ACTION_TOOL_DETAILS, this.search)
+        if (this.search.tool_qr.length >= 10) {
+          this.search.tool_qr = this.search.tool_qr.slice(5, 11)
+        }
+
+      },
+      deep: true
     }
   },
   methods: {

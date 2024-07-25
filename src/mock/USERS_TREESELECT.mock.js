@@ -1,13 +1,13 @@
 const MOCK_USERS_TREESELECT = [{
-        id: 1,
+        id: 'FAJAR TRI CAHYONO',
         label: 'FAJAR TRI CAHYONO',
     },
     {
-        id: 2,
+        id: 'BAMBANG WICAKSONO',
         label: 'BAMBANG WICAKSONO',
     },
     {
-        id: 3,
+        id: 'TUBAGUS HIDAYATULLOH',
         label: 'TUBAGUS HIDAYATULLOH',
     },
 ]

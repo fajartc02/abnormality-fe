@@ -3,11 +3,11 @@ import axios from 'axios'
 const API_URL = process.env.VUE_APP_API_URL
 
 const state = {
-  dataTool: [],
+    dataTool: [],
 }
 
 const getters = {
-  getDataTool: (state) => state.dataTool,
+    getDataTool: (state) => state.dataTool,
 }
 
 const mutations = {
@@ -134,8 +134,8 @@ const actions = {
 }
 
 export default {
-  state,
-  getters,
-  mutations,
-  actions,
+    state,
+    getters,
+    mutations,
+    actions,
 }
