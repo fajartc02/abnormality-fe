@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" tabindex="-1" id="modalAddLine">
+  <div class="modal" tabindex="-1" id="modalAddLineTMS">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -14,12 +14,23 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="LineName" class="form-label">Line Name</label>
+              <label for="lineName" class="form-label">Line Name</label>
               <input
                 type="text"
                 class="form-control"
-                id="LineName"
-                v-model="line_nm"
+                id="lineName"
+                v-model="lineName"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="lineDescription" class="form-label"
+                >Line Description</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="lineDescription"
+                v-model="lineDesc"
               />
             </div>
             <div class="mb-3">
@@ -28,11 +39,12 @@
                 type="text"
                 class="form-control"
                 id="createdBy"
-                v-model="created_by"
+                v-model="createdBy"
               />
             </div>
           </form>
         </div>
+
         <div class="modal-footer">
           <button
             type="button"
@@ -42,10 +54,10 @@
             Close
           </button>
           <button
+            data-bs-dismiss="modal"
             type="button"
             class="btn btn-primary"
-            data-bs-dismiss="modal"
-            @click="saveMasterLine"
+            @click="addLinesTMS()"
           >
             Save
           </button>
@@ -53,8 +65,7 @@
       </div>
     </div>
   </div>
-
-  <div class="modal" tabindex="-1" id="modalEditMasterLine">
+  <div class="modal" tabindex="-1" id="modalEditLinesTMS">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -69,27 +80,37 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="editMasterLineName" class="form-label"
-                >Line Name</label
-              >
+              <label for="lineName" class="form-label">Line Name</label>
               <input
                 type="text"
                 class="form-control"
-                id="editMasterLineName"
+                id="lineName"
                 v-model="editedLine.line_nm"
               />
             </div>
             <div class="mb-3">
-              <label for="editCreated_by" class="form-label">Created By</label>
+              <label for="lineDescription" class="form-label"
+                >Line Description</label
+              >
               <input
                 type="text"
                 class="form-control"
-                id="editCreated_by"
+                id="lineDescription"
+                v-model="editedLine.line_desc"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="createdBy" class="form-label">Created By</label>
+              <input
+                type="text"
+                class="form-control"
+                id="createdBy"
                 v-model="editedLine.created_by"
               />
             </div>
           </form>
         </div>
+
         <div class="modal-footer">
           <button
             type="button"
@@ -101,7 +122,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            @click="saveEditMasterLine"
+            @click="saveEditLines()"
             data-bs-dismiss="modal"
           >
             Save
@@ -110,12 +131,11 @@
       </div>
     </div>
   </div>
-
-  <div class="modal" tabindex="-1" id="modalDeleteMasterLine">
+  <div class="modal" tabindex="-1" id="modalDeleteLinesTMS">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Delete Distribution</h5>
+          <h5 class="modal-title">Delete Line</h5>
           <button
             type="button"
             class="btn-close"
@@ -124,7 +144,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this distribution?</p>
+          <p>Are you sure you want to delete this line?</p>
         </div>
         <div class="modal-footer">
           <button
@@ -137,7 +157,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteMasterLine"
+            @click="deleteLine()"
             data-bs-dismiss="modal"
           >
             Delete
@@ -146,57 +166,57 @@
       </div>
     </div>
   </div>
-
   <div class="container-fluid">
     <div class="card p-2 mb-2">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="text-center m-0">Master Line</h4>
-        <button
+        <CButton
           type="button"
-          class="btn btn-primary"
+          color="secondary"
+          variant="outline"
           data-bs-toggle="modal"
-          data-bs-target="#modalAddLine"
-        >
-          Add Line
-        </button>
+          data-bs-target="#modalAddLineTMS"
+          >Add Line
+        </CButton>
       </div>
     </div>
 
     <div class="card mt-2">
       <div class="card-body">
         <table
-          class="table table-bordered table-striped"
           style="text-align: center"
+          class="table table-bordered table-striped"
         >
           <thead>
             <tr>
               <th>No</th>
-              <th>Line Name</th>
-              <th>Register Date</th>
+              <th>Line</th>
+              <th>Line Description</th>
               <th>Created By</th>
               <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr v-for="(dataLines, index) in getMasterLine" :key="dataLines.id">
-              <td>{{ index + 1 }}</td>
-              <td>{{ dataLines.line_nm }}</td>
-              <td>{{ dataLines.register_dt }}</td>
-              <td>{{ dataLines.created_by }}</td>
+            <tr v-for="(lines, line_id) in GET_LINES" :key="line_id">
+              <td>{{ lines.no }}</td>
+              <td>{{ lines.line_nm }}</td>
+              <td>{{ lines.line_desc }}</td>
+              <td>{{ lines.created_by }}</td>
               <td>
                 <button
-                  class="btn btn-primary"
                   data-bs-toggle="modal"
-                  data-bs-target="#modalEditMasterLine"
-                  @click="showEditMasterLine(dataLines)"
+                  data-bs-target="#modalEditLinesTMS"
+                  class="btn btn-primary"
+                  @click="editLinesTMS(lines)"
                 >
                   <i class="fas fa-edit"></i>
                 </button>
                 <button
-                  class="btn btn-danger ms-2"
                   data-bs-toggle="modal"
-                  data-bs-target="#modalDeleteMasterLine"
-                  @click="showDeleteMasterLine(dataLines.line_id)"
+                  data-bs-target="#modalDeleteLinesTMS"
+                  class="btn btn-danger ms-2"
+                  @click="showDeleteLinesTMS(lines.line_id)"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -208,84 +228,91 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment-timezone'
+import {
+  ACTION_ADD_LINES,
+  ACTION_GET_LINES,
+  GET_LINES,
+  ACTION_DELETE_LINES,
+} from '@/store/TMS/LINES.module'
 
 export default {
-  name: 'MasterGelLines',
+  name: 'MasterLine',
+
   data() {
     return {
-      line_nm: '',
-      created_by: '',
+      lineName: '',
+      lineDesc: '',
+      createdBy: '',
       editedLine: {
+        line_id: null,
         line_nm: '',
+        line_desc: '',
         created_by: '',
       },
       deletedLine: {
-        id: null,
+        line_id: null,
+      },
+      meta: {
+        currentPage: 1,
+        totalData: 0,
+        itemsPerPage: 10,
       },
     }
   },
   computed: {
-    ...mapGetters(['getMasterLine']),
+    ...mapGetters([GET_LINES]),
   },
   mounted() {
-    this.$store.dispatch('fetchMasterLine')
+    this.$store.dispatch(ACTION_GET_LINES, { meta: this.meta })
   },
   methods: {
-    saveMasterLine() {
+    async addLinesTMS() {
       try {
-        const today = moment().format('YYYY-MM-DD HH:mm:ss')
-        const payload = {
-          line_nm: this.line_nm,
-          register_dt: today,
-          created_by: this.created_by,
+        const data = {
+          line_nm: this.lineName,
+          line_desc: this.lineDesc,
+          created_by: this.createdBy,
         }
-        console.log(payload)
-        this.$store.dispatch('ActionAddLine', payload).then(() => {
-          this.$store.dispatch('fetchMasterLine')
-        })
-        this.resetForm()
+        let statusResponse = await this.$store.dispatch(ACTION_ADD_LINES, data)
+
+        if (statusResponse) {
+          this.$store.dispatch(ACTION_GET_LINES, { meta: this.meta })
+          this.$swal('Success', 'Data has been added', 'success')
+          this.resetModal()
+        }
       } catch (error) {
-        console.log(error)
+        console.error(error)
+        this.$swal('Error', 'Gagal menambah data', 'error')
       }
     },
-    resetForm() {
-      this.line_nm = ''
-      this.created_by = ''
-    },
-    showEditMasterLine(dataLines) {
-      this.editedLine = dataLines
+    editLinesTMS(lines) {
+      this.editedLine = lines
       console.log(this.editedLine)
     },
-    saveEditMasterLine() {
-      console.log('kepanggil saveMasterLine')
-      try {
-        this.$store
-          .dispatch('ActionEditMasterLine', this.editedLine)
-          .then(() => {
-            this.$store.dispatch('fetchMasterLine')
-          })
-        console.log(this.editedLine)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    showDeleteMasterLine(id) {
-      this.deletedLine = id
+    showDeleteLinesTMS(lines) {
+      this.deletedLine = lines
       console.log('id', this.deletedLine)
     },
-    deleteMasterLine() {
+    resetModal() {
+      this.lineName = ''
+      this.lineDesc = ''
+      this.createdBy = ''
+    },
+    async deleteLine() {
       try {
-        this.$store
-          .dispatch('ActionDeleteMasterLine', this.deletedLine)
-          .then(() => {
-            this.$store.dispatch('fetchMasterLine')
-          })
+        const id = this.deletedLine
+        console.log('id', id)
+        let statusResponse = await this.$store.dispatch(ACTION_DELETE_LINES, id)
+        if (statusResponse) {
+          this.$store.dispatch(ACTION_GET_LINES, { meta: this.meta })
+          this.$swal('Success', 'Data has been deleted', 'success')
+          this.resetModal()
+        }
       } catch (error) {
         console.log(error)
+        this.$swal('Error', 'Gagal menghapus data', 'error')
       }
     },
   },

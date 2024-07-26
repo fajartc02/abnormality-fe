@@ -106,42 +106,6 @@ export default {
     return {
       nav: [
         {
-          component: 'CNavGroup',
-          name: 'Employee Management',
-          icon: 'cilUser',
-          items: [
-            {
-              component: 'CNavItem',
-              name: 'Absensi Karyawan',
-              to: '/app/dashboard',
-              icon: 'cilCheckCircle',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'History Absensi', // Nama menu untuk EAssesment
-              to: '/EAbsensi', // Path yang dituju saat menu EAssesment diklik
-              icon: 'cilHistory', // Ikonya bisa disesuaikan
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Mapping Job', // Nama menu untuk EAssesment
-              to: '/MappingJob', // Path yang dituju saat menu EAssesment diklik
-              icon: 'cilMap', // Ikonya bisa disesuaikan
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Data Karyawan', // Nama menu untuk EAssesment
-              to: '/AddEmployees', // Path yang dituju saat menu EAssesment diklik
-              icon: 'cilGroup', // Ikonya bisa disesuaikan
-              parentId: 'ROOT',
-            },
-          ],
-        },
-
-        {
           componet: 'CNavGroup',
           name: 'Tool Management', // Nama menu untuk EAssesment
           icon: 'cilPencil', // Ikonya bisa disesuaikan
@@ -176,6 +140,13 @@ export default {
             },
             {
               component: 'CNavItem',
+              name: 'Master Line',
+              to: '/tool/line',
+              // icon: 'cilMap',
+              parentId: 'ROOT',
+            },
+            {
+              component: 'CNavItem',
               name: 'Master Machine',
               to: '/tool/machine',
               // icon: 'cilMap',
@@ -195,70 +166,9 @@ export default {
               // icon: 'cilMap',
               parentId: 'ROOT',
             },
-
-            {
-              component: 'CNavItem',
-              name: 'Reservasi & Regrinding',
-              to: '/tool',
-              icon: 'cilSettings',
-              parentId: 'ROOT',
-            },
           ],
         },
 
-        {
-          component: 'CNavGroup',
-          name: 'Coolant Management', // Nama menu untuk EAssesment
-          icon: 'cilPencil', // Ikonya bisa disesuaikan
-          items: [
-            {
-              component: 'CNavItem',
-              name: 'Planing Kuras Coolant ', // Nama menu untuk EAssesment
-              to: '/planSchedule', // Path yang dituju saat menu EAssesment diklik
-              icon: 'cilCalendar', // Ikonya bisa disesuaikan
-            },
-            {
-              component: 'CNavItem',
-              name: 'History Coolant', // Nama menu untuk EAssesment
-              to: '/historyCoolant', // Path yang dituju saat menu EAssesment diklik
-              icon: 'cilHistory', // Ikonya bisa disesuaikan
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master Schedule', // Nama menu untuk EAssesment
-              to: '/ScheduleKuras', // Path yang dituju saat menu EAssesment diklik
-              icon: 'cilLibraryAdd', // Ikonya bisa disesuaikan
-            },
-          ],
-        },
-        {
-          component: 'CNavGroup',
-          name: 'Delivery Management', // Nama menu untuk EAssesment
-          icon: 'cilTruck', // Ikonya bisa disesuaikan
-          items: [
-            {
-              component: 'CNavItem',
-              name: 'Kanban Delivery',
-              to: '/delivery/kanban',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master Data Tool',
-              to: '/delivery/dataTool',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master Line',
-              to: '/delivery/masterLine',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-          ],
-        },
         // {
         //   component: 'CNavItem',
         //   to: '/contoh',

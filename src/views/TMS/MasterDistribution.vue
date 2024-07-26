@@ -203,19 +203,19 @@
           </thead>
           <tbody>
             <tr
-              v-for="(dataDistribution, index) in getDataDistribution"
-              :key="dataDistribution.id"
+              v-for="(DISTRIBUTIONS_DATA, index) in GET_DISTRIBUTIONS"
+              :key="DISTRIBUTIONS_DATA.distirbution_id"
             >
               <td>{{ index + 1 }}</td>
-              <td>{{ dataDistribution.distribution_nm }}</td>
-              <td>{{ dataDistribution.distribution_desc }}</td>
-              <td>{{ dataDistribution.created_by }}</td>
+              <td>{{ DISTRIBUTIONS_DATA.distribution_nm }}</td>
+              <td>{{ DISTRIBUTIONS_DATA.distribution_desc }}</td>
+              <td>{{ DISTRIBUTIONS_DATA.created_by }}</td>
               <td>
                 <button
                   class="btn btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#modalEditDistribution"
-                  @click="editDataDistribution(dataDistribution)"
+                  @click="editDataDistribution(DISTRIBUTIONS_DATA)"
                 >
                   <i class="fas fa-edit"></i>
                 </button>
@@ -223,7 +223,7 @@
                   class="btn btn-danger ms-2"
                   data-bs-toggle="modal"
                   data-bs-target="#modalDeleteDistribution"
-                  @click="showDeleteConfirmation(dataDistribution.id)"
+                  @click="showDeleteConfirmation(DISTRIBUTIONS_DATA.id)"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -258,7 +258,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getDataDistribution']),
+    ...mapGetters(['GET_DISTRIBUTIONS']),
+  },
+  mounted() {
+    this.$store.dispatch('ACTION_DISTRIBUTIONS')
   },
   methods: {
     saveDistribution() {
@@ -273,6 +276,7 @@ export default {
     },
     editDataDistribution(distribution) {
       this.editedDistribution = { ...distribution }
+      console.log(this.editedDistribution)
     },
     saveEditDistribution() {
       const payload = { ...this.editedDistribution }

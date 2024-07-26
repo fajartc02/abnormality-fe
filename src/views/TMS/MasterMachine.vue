@@ -23,15 +23,6 @@
               />
             </div>
             <div class="mb-3">
-              <label for="cell" class="form-label">Cell</label>
-              <input
-                type="text"
-                class="form-control"
-                id="cell"
-                v-model="cell"
-              />
-            </div>
-            <div class="mb-3">
               <label for="maker" class="form-label">Maker</label>
               <input
                 type="text"
@@ -41,14 +32,12 @@
               />
             </div>
             <div class="mb-3">
-              <label for="machineDescription" class="form-label"
-                >Process Description</label
-              >
+              <label for="machineDescription" class="form-label">OP NO</label>
               <input
                 type="text"
                 class="form-control"
                 id="machineDescription"
-                v-model="machineDescription"
+                v-model="opNo"
               />
             </div>
           </form>
@@ -97,32 +86,21 @@
               />
             </div>
             <div class="mb-3">
-              <label for="cell" class="form-label">Cell</label>
+              <label for="cell" class="form-label">Maker</label>
               <input
                 type="text"
                 class="form-control"
                 id="cell"
-                v-model="editedMachine.line_nm"
+                v-model="editedMachine.maker"
               />
             </div>
             <div class="mb-3">
-              <label for="maker" class="form-label">Maker</label>
+              <label for="maker" class="form-label">OP NO</label>
               <input
                 type="text"
                 class="form-control"
                 id="maker"
-                v-model="editedMachine.machine_maker"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="machineDescription" class="form-label"
-                >Machine Description</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="machineDescription"
-                v-model="editedMachine.machine_desc"
+                v-model="editedMachine.op_no"
               />
             </div>
           </form>
@@ -183,32 +161,6 @@
       </div>
     </div>
   </div>
-  <nav aria-label="Page navigation" class="mb-2">
-    <ul class="pagination justify-content-center mb-0">
-      <li class="page-item" :class="{ disabled: currentPage === 1 }">
-        <button class="page-link" @click="goToPage(currentPage - 1)">
-          <span aria-hidden="true">&laquo;</span>
-          <span class="sr-only">Previous</span>
-        </button>
-      </li>
-      <li
-        class="page-item"
-        v-for="page in totalPages"
-        :key="page"
-        :class="{ active: currentPage === page }"
-      >
-        <button class="page-link" @click="goToPage(page)">
-          {{ page }}
-        </button>
-      </li>
-      <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-        <button class="page-link" @click="goToPage(currentPage + 1)">
-          <span aria-hidden="true">&raquo;</span>
-          <span class="sr-only">Next</span>
-        </button>
-      </li>
-    </ul>
-  </nav>
   <div class="container-fluid">
     <div class="card p-2 mb-2">
       <div class="d-flex justify-content-between align-items-center">
@@ -234,26 +186,27 @@
             <tr>
               <th>No</th>
               <th>Machine Name</th>
-              <th>Cell</th>
               <th>Maker</th>
-              <th>Process Description</th>
+              <th>OP NO</th>
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr v-for="(dataMachine, index) in paginatedData" :key="machine_id">
-              <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
-              <td>{{ dataMachine.machine_nm }}</td>
-              <td>{{ dataMachine.line_nm }}</td>
-              <td>{{ dataMachine.machine_maker }}</td>
-              <td>{{ dataMachine.machine_desc }}</td>
+            <tr
+              v-for="(machines, machine_id) in GET_MACHINES"
+              :key="machine_id"
+            >
+              <td>{{ machines.no }}</td>
+              <td>{{ machines.machine_nm }}</td>
+              <td>{{ machines.maker }}</td>
+              <td>{{ machines.op_no }}</td>
               <td>
                 <button
                   data-bs-toggle="modal"
                   data-bs-target="#modalEditMachineTMS"
                   class="btn btn-primary"
-                  @click="editMachineTMS(dataMachine)"
+                  @click="editMachineTMS(machines)"
                 >
                   <i class="fas fa-edit"></i>
                 </button>
@@ -261,7 +214,7 @@
                   data-bs-toggle="modal"
                   data-bs-target="#modalDeleteMachineTMS"
                   class="btn btn-danger ms-2"
-                  @click="deleteMachineTMS(dataMachine)"
+                  @click="deleteMachineTMS(machines)"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -269,50 +222,91 @@
             </tr>
           </tbody>
         </table>
+        <div class="card-footer">
+          <div class="d-flex justify-content-between">
+            <div>
+              <label class="m-0">Show</label>
+              <select class="form-select" v-model="meta.itemsPerPage">
+                <option
+                  v-for="itemsPerPage in [10, 25, 50, 100]"
+                  :key="itemsPerPage"
+                  :value="itemsPerPage"
+                >
+                  {{ itemsPerPage }}
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="m-0">Page</label>
+              <PaginationMaster
+                :currentPage="meta.currentPage"
+                :totalData="meta.totalData"
+                :itemsPerPage="meta.itemsPerPage"
+                @page-changed="handlePageChange"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  ACTION_ADD_MACHINES,
+  ACTION_EDIT_MACHINES,
+  ACTION_MACHINES,
+  GET_MACHINES,
+} from '@/store/TMS/MACHINES.module'
+import { GET_META } from '@/store/TMS/META.module'
 import { mapGetters } from 'vuex'
+import PaginationMaster from '@/components/TMS/Pagination/PaginationMaster.vue'
 export default {
   name: 'MasterMachine',
+  components: {
+    PaginationMaster,
+  },
   data() {
     return {
       currentPage: 1,
       pageSize: 20,
       machineName: '',
-      cell: '',
       maker: '',
-      machineDescription: '',
+      opNo: '',
       editedMachine: {
         machine_nm: '',
-        line_nm: '',
         machine_maker: '',
         machine_desc: '',
       },
       deletedMachine: '',
+      meta: {
+        totalData: 0,
+        currentPage: 1,
+        itemsPerPage: 10,
+        totalPages: 1,
+      },
     }
   },
   mounted() {
-    this.$store.dispatch('ActionGetMachine')
+    this.$store.dispatch(ACTION_MACHINES, { meta: this.meta })
   },
   computed: {
-    ...mapGetters(['getMachineTool']),
-    paginatedData() {
-      const startIndex = (this.currentPage - 1) * this.pageSize
-      const endIndex = startIndex + this.pageSize
-      return this.getMachineTool.slice(startIndex, endIndex)
+    ...mapGetters([GET_MACHINES, GET_META]),
+  },
+
+  watch: {
+    GET_META: function () {
+      this.meta = this.GET_META
     },
-    totalPages() {
-      return Math.ceil(this.getMachineTool.length / this.pageSize)
+    'meta.itemsPerPage': function () {
+      this.$store.dispatch(ACTION_MACHINES, { meta: this.meta })
     },
   },
 
   methods: {
-    goToPage(page) {
-      if (page < 1 || page > this.totalPages) return
-      this.currentPage = page
+    handlePageChange(page) {
+      this.meta.currentPage = page
+      this.$store.dispatch(ACTION_MACHINES, { meta: this.meta })
     },
     addMachineTMS() {
       try {
@@ -322,7 +316,8 @@ export default {
           machine_maker: this.maker,
           machine_desc: this.machineDescription,
         }
-        this.$store.dispatch('ActionAddMachineTMS', payload)
+        console.log(payload)
+        this.$store.dispatch(ACTION_ADD_MACHINES, payload)
       } catch (error) {
         console.log(error)
       }
@@ -330,12 +325,13 @@ export default {
 
     editMachineTMS(machine) {
       this.editedMachine = machine
+      console.log(this.editedMachine)
     },
 
     saveEditMachine() {
       try {
         console.log(this.editedMachine)
-        this.$store.dispatch('ActionEditMachineTMS', this.editedMachine)
+        this.$store.dispatch(ACTION_EDIT_MACHINES, this.editedMachine)
       } catch (error) {
         console.log(error)
       }

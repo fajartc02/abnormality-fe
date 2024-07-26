@@ -217,21 +217,21 @@
           </thead>
           <tbody>
             <tr
-              v-for="(dataSystem, index) in getDataSystem"
-              :key="dataSystem.id"
+              v-for="(SYSTEM_DATA, index) in GET_SYSTEM"
+              :key="SYSTEM_DATA.system_id"
             >
               <td>{{ index + 1 }}</td>
-              <td>{{ dataSystem.system_type }}</td>
-              <td>{{ dataSystem.system_value }}</td>
-              <td>{{ dataSystem.system_desc }}</td>
-              <td>{{ dataSystem.created_by }}</td>
+              <td>{{ SYSTEM_DATA.system_type }}</td>
+              <td>{{ SYSTEM_DATA.system_value }}</td>
+              <td>{{ SYSTEM_DATA.system_desc }}</td>
+              <td>{{ SYSTEM_DATA.created_by }}</td>
 
               <td>
                 <button
                   class="btn btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#modalEditSystem"
-                  @click="prepareEditSystem(dataSystem)"
+                  @click="prepareEditSystem(SYSTEM_DATA)"
                 >
                   <i class="fas fa-edit"></i>
                 </button>
@@ -239,7 +239,7 @@
                   class="btn btn-danger ms-2"
                   data-bs-toggle="modal"
                   data-bs-target="#modalDeleteSystem"
-                  @click="showDeleteConfirmationSystem(dataSystem.id)"
+                  @click="showDeleteConfirmationSystem(SYSTEM_DATA.system_id)"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -276,7 +276,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getDataSystem']),
+    ...mapGetters(['GET_SYSTEM']),
+  },
+  mounted() {
+    this.$store.dispatch('ACTION_SYSTEM')
   },
   methods: {
     saveSystem() {
