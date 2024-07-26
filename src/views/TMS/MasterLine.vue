@@ -1,9 +1,9 @@
 <template>
-  <div class="modal" tabindex="-1" id="modalAddDistribution">
+  <div class="modal" tabindex="-1" id="modalAddLineTMS">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Add Distribution</h5>
+          <h5 class="modal-title">Add Line</h5>
           <button
             type="button"
             class="btn-close"
@@ -14,25 +14,23 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="distributionName" class="form-label"
-                >Distribution Name</label
-              >
+              <label for="lineName" class="form-label">Line Name</label>
               <input
                 type="text"
                 class="form-control"
-                id="distributionName"
-                v-model="distribution_nm"
+                id="lineName"
+                v-model="lineName"
               />
             </div>
             <div class="mb-3">
-              <label for="distributionDescription" class="form-label"
-                >Distribution Description</label
+              <label for="lineDescription" class="form-label"
+                >Line Description</label
               >
               <input
                 type="text"
                 class="form-control"
-                id="distributionDescription"
-                v-model="distribution_desc"
+                id="lineDescription"
+                v-model="lineDesc"
               />
             </div>
             <div class="mb-3">
@@ -41,11 +39,12 @@
                 type="text"
                 class="form-control"
                 id="createdBy"
-                v-model="created_by"
+                v-model="createdBy"
               />
             </div>
           </form>
         </div>
+
         <div class="modal-footer">
           <button
             type="button"
@@ -55,10 +54,10 @@
             Close
           </button>
           <button
+            data-bs-dismiss="modal"
             type="button"
             class="btn btn-primary"
-            data-bs-dismiss="modal"
-            @click="saveDistribution"
+            @click="addLinesTMS()"
           >
             Save
           </button>
@@ -66,12 +65,11 @@
       </div>
     </div>
   </div>
-
-  <div class="modal" tabindex="-1" id="modalEditDistribution">
+  <div class="modal" tabindex="-1" id="modalEditLinesTMS">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Distribution</h5>
+          <h5 class="modal-title">Edit Line</h5>
           <button
             type="button"
             class="btn-close"
@@ -82,38 +80,37 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="editDistributionName" class="form-label"
-                >Distribution Name</label
+              <label for="lineName" class="form-label">Line Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="lineName"
+                v-model="editedLine.line_nm"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="lineDescription" class="form-label"
+                >Line Description</label
               >
               <input
                 type="text"
                 class="form-control"
-                id="editDistributionName"
-                v-model="editedDistribution.distribution_nm"
+                id="lineDescription"
+                v-model="editedLine.line_desc"
               />
             </div>
             <div class="mb-3">
-              <label for="editDistributionDescription" class="form-label"
-                >Distribution Description</label
-              >
+              <label for="createdBy" class="form-label">Created By</label>
               <input
                 type="text"
                 class="form-control"
-                id="editDistributionDescription"
-                v-model="editedDistribution.distribution_desc"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="editCreatedBy" class="form-label">Created By</label>
-              <input
-                type="text"
-                class="form-control"
-                id="editCreatedBy"
-                v-model="editedDistribution.created_by"
+                id="createdBy"
+                v-model="editedLine.created_by"
               />
             </div>
           </form>
         </div>
+
         <div class="modal-footer">
           <button
             type="button"
@@ -125,7 +122,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            @click="saveEditDistribution"
+            @click="saveEditLines()"
             data-bs-dismiss="modal"
           >
             Save
@@ -134,12 +131,11 @@
       </div>
     </div>
   </div>
-
-  <div class="modal" tabindex="-1" id="modalDeleteDistribution">
+  <div class="modal" tabindex="-1" id="modalDeleteLinesTMS">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Delete Distribution</h5>
+          <h5 class="modal-title">Delete Line</h5>
           <button
             type="button"
             class="btn-close"
@@ -148,7 +144,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this distribution?</p>
+          <p>Are you sure you want to delete this line?</p>
         </div>
         <div class="modal-footer">
           <button
@@ -161,7 +157,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteDataDistribution"
+            @click="deleteLine()"
             data-bs-dismiss="modal"
           >
             Delete
@@ -170,60 +166,57 @@
       </div>
     </div>
   </div>
-
   <div class="container-fluid">
     <div class="card p-2 mb-2">
       <div class="d-flex justify-content-between align-items-center">
-        <h4 class="text-center m-0">Master Distribution</h4>
-        <button
+        <h4 class="text-center m-0">Master Line</h4>
+        <CButton
           type="button"
-          class="btn btn-primary"
+          color="secondary"
+          variant="outline"
           data-bs-toggle="modal"
-          data-bs-target="#modalAddDistribution"
-        >
-          Add Distribution
-        </button>
+          data-bs-target="#modalAddLineTMS"
+          >Add Line
+        </CButton>
       </div>
     </div>
 
     <div class="card mt-2">
       <div class="card-body">
         <table
-          class="table table-bordered table-striped"
           style="text-align: center"
+          class="table table-bordered table-striped"
         >
           <thead>
             <tr>
               <th>No</th>
-              <th>Distribution Name</th>
-              <th>Description</th>
+              <th>Line</th>
+              <th>Line Description</th>
               <th>Created By</th>
               <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr
-              v-for="(DISTRIBUTIONS_DATA, index) in GET_DISTRIBUTIONS"
-              :key="DISTRIBUTIONS_DATA.distirbution_id"
-            >
-              <td>{{ index + 1 }}</td>
-              <td>{{ DISTRIBUTIONS_DATA.distribution_nm }}</td>
-              <td>{{ DISTRIBUTIONS_DATA.distribution_desc }}</td>
-              <td>{{ DISTRIBUTIONS_DATA.created_by }}</td>
+            <tr v-for="(lines, line_id) in GET_LINES" :key="line_id">
+              <td>{{ lines.no }}</td>
+              <td>{{ lines.line_nm }}</td>
+              <td>{{ lines.line_desc }}</td>
+              <td>{{ lines.created_by }}</td>
               <td>
                 <button
-                  class="btn btn-primary"
                   data-bs-toggle="modal"
-                  data-bs-target="#modalEditDistribution"
-                  @click="editDataDistribution(DISTRIBUTIONS_DATA)"
+                  data-bs-target="#modalEditLinesTMS"
+                  class="btn btn-primary"
+                  @click="editLinesTMS(lines)"
                 >
                   <i class="fas fa-edit"></i>
                 </button>
                 <button
-                  class="btn btn-danger ms-2"
                   data-bs-toggle="modal"
-                  data-bs-target="#modalDeleteDistribution"
-                  @click="showDeleteConfirmation(DISTRIBUTIONS_DATA.id)"
+                  data-bs-target="#modalDeleteLinesTMS"
+                  class="btn btn-danger ms-2"
+                  @click="showDeleteLinesTMS(lines.line_id)"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -235,66 +228,92 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
+import {
+  ACTION_ADD_LINES,
+  ACTION_GET_LINES,
+  GET_LINES,
+  ACTION_DELETE_LINES,
+} from '@/store/TMS/LINES.module'
 
 export default {
-  name: 'MasterDistribution',
+  name: 'MasterLine',
+
   data() {
     return {
-      distribution_nm: '',
-      distribution_desc: '',
-      created_by: '',
-      editedDistribution: {
-        id: null,
-        distribution_nm: '',
-        distribution_desc: '',
+      lineName: '',
+      lineDesc: '',
+      createdBy: '',
+      editedLine: {
+        line_id: null,
+        line_nm: '',
+        line_desc: '',
         created_by: '',
       },
-      deletedDistribution: {
-        id: null,
+      deletedLine: {
+        line_id: null,
+      },
+      meta: {
+        currentPage: 1,
+        totalData: 0,
+        itemsPerPage: 10,
       },
     }
   },
   computed: {
-    ...mapGetters(['GET_DISTRIBUTIONS']),
+    ...mapGetters([GET_LINES]),
   },
   mounted() {
-    this.$store.dispatch('ACTION_DISTRIBUTIONS')
+    this.$store.dispatch(ACTION_GET_LINES, { meta: this.meta })
   },
   methods: {
-    saveDistribution() {
-      const payload = {
-        id: this.getDataDistribution.length + 1,
-        distribution_nm: this.distribution_nm,
-        distribution_desc: this.distribution_desc,
-        created_by: this.created_by,
+    async addLinesTMS() {
+      try {
+        const data = {
+          line_nm: this.lineName,
+          line_desc: this.lineDesc,
+          created_by: this.createdBy,
+        }
+        let statusResponse = await this.$store.dispatch(ACTION_ADD_LINES, data)
+
+        if (statusResponse) {
+          this.$store.dispatch(ACTION_GET_LINES, { meta: this.meta })
+          this.$swal('Success', 'Data has been added', 'success')
+          this.resetModal()
+        }
+      } catch (error) {
+        console.error(error)
+        this.$swal('Error', 'Gagal menambah data', 'error')
       }
-      this.$store.dispatch('ActionSaveDistribution', payload)
-      this.resetForm()
     },
-    editDataDistribution(distribution) {
-      this.editedDistribution = { ...distribution }
-      console.log(this.editedDistribution)
+    editLinesTMS(lines) {
+      this.editedLine = lines
+      console.log(this.editedLine)
     },
-    saveEditDistribution() {
-      const payload = { ...this.editedDistribution }
-      this.$store.dispatch('ActionEditDistribution', payload)
+    showDeleteLinesTMS(lines) {
+      this.deletedLine = lines
+      console.log('id', this.deletedLine)
     },
-    showDeleteConfirmation(id) {
-      this.deletedDistribution = id
-      console.log('id', this.deletedDistribution)
+    resetModal() {
+      this.lineName = ''
+      this.lineDesc = ''
+      this.createdBy = ''
     },
-    deleteDataDistribution() {
-      const id = this.deletedDistribution
-      console.log('id', id)
-      this.$store.dispatch('ActionDeleteDistribution', id)
-    },
-    resetForm() {
-      this.distribution_nm = ''
-      this.distribution_desc = ''
-      this.created_by = ''
+    async deleteLine() {
+      try {
+        const id = this.deletedLine
+        console.log('id', id)
+        let statusResponse = await this.$store.dispatch(ACTION_DELETE_LINES, id)
+        if (statusResponse) {
+          this.$store.dispatch(ACTION_GET_LINES, { meta: this.meta })
+          this.$swal('Success', 'Data has been deleted', 'success')
+          this.resetModal()
+        }
+      } catch (error) {
+        console.log(error)
+        this.$swal('Error', 'Gagal menghapus data', 'error')
+      }
     },
   },
 }
