@@ -24,6 +24,7 @@
 import MOCK_MACHINES_TREESELECT from "@/mock/MACHINES_TREESELECT.mock";
 import MOCK_USERS_TREESELECT from "@/mock/USERS_TREESELECT.mock";
 import { ACTION_ADD_TOOL_HISTORY, ACTION_TOOL_DETAILS, GET_TOOL_DETAILS } from "@/store/TMS/TOOLS.module";
+import { GET_USERS_OPTS, ACTION_USERS } from "@/store/TMS/USERS.module";
 
 import Treeselect from "@zanmato/vue3-treeselect";
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
@@ -43,7 +44,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([GET_TOOL_DETAILS]),
+    ...mapGetters([GET_TOOL_DETAILS, GET_USERS_OPTS]),
   },
   methods: {
     async submitCheck() {
@@ -76,6 +77,13 @@ export default {
       }
     }
   },
+  watch: {
+    GET_USERS_OPTS: function () {
+      if (this.GET_USERS_OPTS.length > 0) {
+        this.users = this.GET_USERS_OPTS
+      }
+    }
+  },
   components: {
     Treeselect
   },
@@ -84,6 +92,9 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  mounted() {
+    this.$store.dispatch(ACTION_USERS, { meta: this.GET_META })
   }
 }
 </script>

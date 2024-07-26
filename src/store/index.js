@@ -8,11 +8,6 @@ import DashBoardToolModule from './DashBoardToolModule'
 
 import MasterDrawingModule from './MasterDrawingModule'
 import DeliveryModule from './Delivery.Module'
-import MasterMachineModule from './MasterMachine.module'
-import DistributionModule from './Distribution.module'
-import SystemModule from './System.module'
-import MasterLineModule from './MasterLine.module'
-import KanbanFromGel from './KanbanFromGel.module'
 
 import focusInputModule from './TMS/focusInput.module'
 import TOOL_TYPESModule from './TMS/TOOL_TYPES.module'
@@ -23,6 +18,7 @@ import DISTRIBUTIONSModule from './TMS/DISTRIBUTIONS.module'
 import MACHINESModule from './TMS/MACHINES.module'
 import SYSTEMModule from './TMS/SYSTEM.module'
 import GRAPHModule from './TMS/GRAPH.module'
+import USERSModule from './TMS/USERS.module'
 
 export default createStore({
     state: {
@@ -58,27 +54,9 @@ export default createStore({
         TOOL_STDModule,
         DISTRIBUTIONSModule,
         GRAPHModule,
+        USERSModule,
 
         MACHINESModule,
         SYSTEMModule,
     },
-
-  },
-  actions: {},
-  modules: {
-    EmployeeModule,
-    AbsensiModule,
-    mappingModule,
-    CoolantModule,
-    PlanKurasModule,
-    DashBoardToolModule,
-    MasterDrawingModule,
-    DeliveryModule,
-    focusInputModule,
-    MasterMachineModule,
-    DistributionModule,
-    SystemModule,
-    MasterLineModule,
-    KanbanFromGel,
-  },
 })

@@ -60,6 +60,7 @@ import MOCK_TOOL_NOTES_TREESELECT from "@/mock/NOTES_TOOL_TREESELECT.mock";
 import MOCK_USERS_TREESELECT from "@/mock/USERS_TREESELECT.mock";
 import { ACTION_SYSTEM, GET_SYSTEM_OPTS } from "@/store/TMS/SYSTEM.module";
 import { ACTION_ADD_TOOL_HISTORY, ACTION_TOOL_DETAILS, GET_TOOL_DETAILS } from "@/store/TMS/TOOLS.module";
+import { GET_USERS_OPTS, ACTION_USERS } from "@/store/TMS/USERS.module";
 
 import Treeselect from "@zanmato/vue3-treeselect";
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
@@ -145,9 +146,14 @@ export default {
       if (this.modalShow) await this.$store.dispatch(ACTION_SYSTEM, { system_type: "SYSTEM_PROBLEM" })
       this.problem_opts = this.GET_SYSTEM_OPTS
     },
+    GET_USERS_OPTS: function () {
+      if (this.GET_USERS_OPTS.length > 0) {
+        this.users = this.GET_USERS_OPTS
+      }
+    }
   },
   computed: {
-    ...mapGetters([GET_TOOL_DETAILS, GET_SYSTEM_OPTS]),
+    ...mapGetters([GET_TOOL_DETAILS, GET_SYSTEM_OPTS, GET_USERS_OPTS]),
     isCounterAchieved() {
       return this.form.act_counter >= this.std_counter
     },
@@ -170,6 +176,7 @@ export default {
   },
   mounted() {
     this.std_counter = this.GET_TOOL_DETAILS.std_counter
+    this.$store.dispatch(ACTION_USERS, { meta: this.GET_META })
   }
 }
 </script>
