@@ -58,6 +58,7 @@ import { ACTION_ADD_TOOL_HISTORY, ACTION_TOOL_DETAILS, GET_TOOL_DETAILS } from "
 
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
 import { mapGetters } from "vuex";
+import { ACTION_USERS, GET_USERS_OPTS } from "@/store/TMS/USERS.module";
 
 export default {
   name: "RegrindingAction",
@@ -120,7 +121,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([GET_TOOL_STD, GET_META, GET_TOOL_DETAILS]),
+    ...mapGetters([GET_TOOL_STD, GET_META, GET_TOOL_DETAILS, GET_USERS_OPTS]),
     isAllFilled() {
       const isValueFill = this.form.filter(item => item.value)
       return isValueFill.length == this.form.length
@@ -152,6 +153,11 @@ export default {
       if (this.GET_TOOL_STD.length > 0) {
         this.form = this.GET_TOOL_STD
       }
+    },
+    GET_USERS_OPTS: function () {
+      if (this.GET_USERS_OPTS.length > 0) {
+        this.users = this.GET_USERS_OPTS
+      }
     }
   },
   props: {
@@ -164,6 +170,9 @@ export default {
       default: null
     }
   },
+  mounted() {
+    this.$store.dispatch(ACTION_USERS, { meta: this.GET_META })
+  }
 }
 </script>
 <style></style>

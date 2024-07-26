@@ -146,12 +146,12 @@ export default {
     }
   },
   watch: {
-    'form.tool_type_id': function () {
+    'form.tool_type_id': async function () {
       this.selected_tool_type = this.GET_TOOL_TYPES.find((toolType) => toolType.tool_type_id == this.form.tool_type_id)
       if (this.selected_tool_type) {
         this.form.std_counter = this.selected_tool_type.std_counter
         this.form.tool_type_nm = this.selected_tool_type.tool_type_nm
-        if (this.form.tool_type_id) this.$store.dispatch(ACTION_GENERATE_TOOL)
+        if (this.form.tool_type_id) await this.$store.dispatch(ACTION_GENERATE_TOOL)
         this.form.tool_qr = this.GET_TOOL_QR
       }
     },

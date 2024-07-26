@@ -7,6 +7,7 @@ import DefaultLayoutStandAlone from '@/standalone/layouts/DefaultLayoutStandAlon
 /*define const other in here*/
 
 console.log(process.env.VUE_APP_STANDALONE_SINGLE_SPA)
+
 const routes = [
   {
     path: '/',
@@ -81,12 +82,12 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
-  routes,
-  scrollBehavior() {
-    // always scroll to top
-    return { top: 0 }
-  },
+    history: createWebHashHistory(process.env.BASE_URL),
+    routes,
+    scrollBehavior() {
+        // always scroll to top
+        return { top: 0 }
+    },
 })
 
 export default router
