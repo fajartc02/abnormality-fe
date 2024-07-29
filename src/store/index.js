@@ -1,8 +1,6 @@
 import { createStore } from 'vuex'
 
-
 import MasterDrawingModule from './TMS/MasterDrawingModule'
-
 
 import focusInputModule from './TMS/focusInput.module'
 import TOOL_TYPESModule from './TMS/TOOL_TYPES.module'
@@ -17,7 +15,6 @@ import GRAPHModule from './TMS/GRAPH.module'
 import LINESModule from './TMS/LINES.module'
 import USERSModule from './TMS/USERS.module'
 
-
 export default createStore({
   state: {
     sidebarVisible: '',
@@ -30,29 +27,23 @@ export default createStore({
     toggleUnfoldable(state) {
       state.sidebarUnfoldable = !state.sidebarUnfoldable
     },
+  },
 
-    actions: {},
-    modules: {
-        EmployeeModule,
-        AbsensiModule,
-        mappingModule,
-        CoolantModule,
-        PlanKurasModule,
-        DashBoardToolModule,
-        MasterDrawingModule,
-        DeliveryModule,
+  actions: {},
+  modules: {
+    MasterDrawingModule,
 
-        focusInputModule,
-        TOOL_TYPESModule,
-        TOOLSModule,
-        METAModule,
-        TOOL_STDModule,
-        DISTRIBUTIONSModule,
-        GRAPHModule,
-        USERSModule,
-        LINESModule,
+    focusInputModule,
+    TOOL_TYPESModule,
+    TOOLSModule,
+    METAModule,
+    TOOL_STDModule,
+    DISTRIBUTIONSModule,
+    GRAPHModule,
+    USERSModule,
+    LINESModule,
 
-        MACHINESModule,
-        SYSTEMModule,
-    },
+    MACHINESModule,
+    SYSTEMModule,
+  },
 })
