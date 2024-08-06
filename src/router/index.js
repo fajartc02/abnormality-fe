@@ -23,47 +23,17 @@ const routes = [
             window.location.href = process.env.dc + '/#/sc/login'
             // return '/redirectingToLogin' // not important since redirecting
           }
-        : '/tool/status',
+        : '/dashboard',
     children: [
       {
-        path: '/tool/status',
-        name: 'ToolStatus',
-        component: () => import('@/views/TMS/ToolStatus.vue'),
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/abnormality/Dashboard.vue'),
       },
       {
-        path: '/tool/register',
-        name: 'ToolRegister',
-        component: () => import('@/views/TMS/ToolRegister.vue'),
-      },
-      {
-        path: '/tool/section',
-        name: 'ToolSection',
-        component: () => import('@/views/TMS/ToolSection.vue'),
-      },
-      {
-        path: '/tool/drawing',
-        name: 'MasterDrawing',
-        component: () => import('@/views/TMS/MasterDrawing.vue'),
-      },
-      {
-        path: '/tool/line',
-        name: 'MasterLine',
-        component: () => import('@/views/TMS/MasterLine.vue'),
-      },
-      {
-        path: '/tool/machine',
-        name: 'MasterMachine',
-        component: () => import('@/views/TMS/MasterMachine.vue'),
-      },
-      {
-        path: '/tool/distribution',
-        name: 'MasterDistribution',
-        component: () => import('@/views/TMS/MasterDistribution.vue'),
-      },
-      {
-        path: '/tool/system',
-        name: 'MasterSystem',
-        component: () => import('@/views/TMS/MasterSystem.vue'),
+        path: '/input-problem',
+        name: 'InputProblem',
+        component: () => import('@/views/abnormality/InputProblem.vue'),
       },
 
       /*define other in here*/
@@ -82,12 +52,12 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(process.env.BASE_URL),
-    routes,
-    scrollBehavior() {
-        // always scroll to top
-        return { top: 0 }
-    },
+  history: createWebHashHistory(process.env.BASE_URL),
+  routes,
+  scrollBehavior() {
+    // always scroll to top
+    return { top: 0 }
+  },
 })
 
 export default router

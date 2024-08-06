@@ -1,37 +1,17 @@
 <template>
-  <CSidebar
-    class="bg-white"
-    position="fixed"
-    :unfoldable="sidebarUnfoldable"
-    :visible="sidebarVisible"
-    @visible-change="
-      (event) =>
-        $store.commit({
-          type: 'updateSidebarVisible',
-          value: event,
-        })
-    "
-  >
+  <CSidebar class="bg-white" position="fixed" :unfoldable="sidebarUnfoldable" :visible="sidebarVisible" @visible-change="(event) =>
+    $store.commit({
+      type: 'updateSidebarVisible',
+      value: event,
+    })
+    ">
     <CSidebarBrand>
-      <img
-        src="../assets/brand/Toyota_logo.png"
-        class="img-fluid sidebar-brand-full"
-        width="200"
-        height="200"
-      />
-      <img
-        src="../assets/brand/Toyota_logo.png"
-        class="sidebar-brand-narrow"
-        width="36"
-        height="10"
-      />
+      <img src="../assets/brand/Toyota_logo.png" class="img-fluid sidebar-brand-full" width="200" height="200" />
+      <img src="../assets/brand/Toyota_logo.png" class="sidebar-brand-narrow" width="36" height="10" />
     </CSidebarBrand>
     <AppSidebarNav v-bind:nav="nav" />
-    <CSidebarToggler
-      id="SidebarToggler"
-      class="d-none d-lg-flex submenu-background"
-      @click="$store.commit('toggleUnfoldable')"
-    />
+    <CSidebarToggler id="SidebarToggler" class="d-none d-lg-flex submenu-background"
+      @click="$store.commit('toggleUnfoldable')" />
   </CSidebar>
 </template>
 
@@ -106,67 +86,18 @@ export default {
     return {
       nav: [
         {
-          componet: 'CNavGroup',
-          name: 'Tool Management', // Nama menu untuk EAssesment
-          icon: 'cilPencil', // Ikonya bisa disesuaikan
-          items: [
-            {
-              component: 'CNavItem',
-              name: 'Tool Status',
-              to: '/tool/status',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Tools Section',
-              to: '/tool/section',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Register Tools',
-              to: '/tool/register',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master Drawing',
-              to: '/tool/drawing',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master Line',
-              to: '/tool/line',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master Machine',
-              to: '/tool/machine',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master Distribution',
-              to: '/tool/distribution',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              name: 'Master System',
-              to: '/tool/system',
-              // icon: 'cilMap',
-              parentId: 'ROOT',
-            },
-          ],
+          component: 'CNavItem',
+          name: 'Dashboard',
+          to: '/dashboard',
+          // icon: 'cilMap',
+          parentId: 'ROOT',
+        },
+        {
+          component: 'CNavItem',
+          name: 'Input Problem',
+          to: '/input-problem',
+          // icon: 'cilMap',
+          parentId: 'ROOT',
         },
 
         // {

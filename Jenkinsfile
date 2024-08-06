@@ -1,7 +1,7 @@
 pipeline {
    agent any
    environment {
-     SERVICE_NAME = "mf-qdc"
+     SERVICE_NAME = "abnormality-fe"
 	 NAMESPACE = "platform-app"
 	 WEB_FOLDER= "/var/www/html"
    }
@@ -13,7 +13,7 @@ pipeline {
            git credentialsId: '63978329-a1ea-4d66-9048-4f19d66444f5', url: "https://gitlab.com/tmcp/${SERVICE_NAME}.git"
         }
    }
-   
+
    stage('Build Compile') {
      steps {
 	   sh 'npm install'
@@ -27,6 +27,6 @@ pipeline {
       sh 'cp -R dist/* ${WEB_FOLDER}/${SERVICE_NAME}'
     }
   }
-  
+
  }
 }
