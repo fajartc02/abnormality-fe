@@ -25,10 +25,12 @@
       </CCol>
     </CRow>
     <CRow class="mt-3">
-      <CCol class="d-flex justify-content-evenly" md="12">
-        <CButton v-if="!isEdit" color="success" @click="$emit('emit-input', form)">Submit</CButton>
-        <CButton v-else color="warning" @click="$emit('emit-input-edit', form)">Update</CButton>
-        <CButton color="danger" @click="$router.push('/')">Cancel</CButton>
+      <CCol class="d-flex justify-content-evenly" md="6" sm="12">
+        <CButton class="w-100" v-if="!isEdit" color="success" @click="$emit('emit-input', form)">Submit</CButton>
+        <CButton class="w-100" v-else color="primary" @click="$emit('emit-input-edit', form)">Update</CButton>
+      </CCol>
+      <CCol class="d-flex justify-content-evenly" md="6" sm="12">
+        <CButton class="w-100" color="warning" @click="$router.push('/')">Cancel</CButton>
       </CCol>
     </CRow>
   </div>

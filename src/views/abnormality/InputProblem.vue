@@ -33,6 +33,7 @@ export default {
         let dataMap = await this.dataMap(data.data);
 
         this.fieldsInput.push(InputModel('Line', 'option', 'Select Line', this.detailProblem?.line_id || null, dataMap, 6, false))
+        this.fieldsInput.push(InputModel('Machine / OP', 'text', 'Select Machine / OP', this.detailProblem?.machine_id || null, dataMap, 6, false))
       } catch (error) {
         console.log(error);
 
@@ -75,6 +76,7 @@ export default {
         let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/statuses/get`);
         let dataMap = await this.dataMap(data.data);
         this.fieldsInput.push(InputModel('Status', 'option', 'Select Status', this.detailProblem?.status_id || '1', dataMap, 6, this.detailProblem?.status_id || false))
+        // this.fieldsInput.push(InputModel('Ilustration', 'file', 'Select Ilustration', this.detailProblem?.ilustration || '', dataMap, 6, this.detailProblem?.ilustration || false))
       } catch (error) {
         this.$swal('Error', 'Error on fetch shifts', 'error')
       }
@@ -108,7 +110,13 @@ export default {
         }
 
         await axios.post(`${process.env.VUE_APP_API_URL}/problems/add`, obj);
-        this.$swal('Success', 'Success on submit input', 'success')
+        this.$swal({
+          icon: 'success',
+          title: 'Success',
+          text: 'Success to submit input',
+          timer: 2000,
+          showConfirmButton: false
+        })
         this.$router.push('/')
       } catch (error) {
         this.$swal('Error', 'Error on submit input', 'error')

@@ -12,8 +12,15 @@
     </div>
 
     <div class="row mt-2">
+      <!-- NEW FEATURE -->
+      <!-- <div class="col-12 col-md-12 col-lg-12">
+        <AbnormalityLegend :label="'Total Summary Problem (Yearly)'" :legends="legendWeekly" />
+        <div class="card">
+          <AbnormalityGraph :groupBy="'yearly'" :yearMonth="filter.date" @emit-legend="getLegendWeekly" />
+        </div>
+      </div> -->
       <div class="col-12 col-md-6 col-lg-7">
-        <AbnormalityLegend :label="'Grafik Weekly Progress Problem'" :legends="legendWeekly" />
+        <AbnormalityLegend :label="'Total Summary Problem (Weekly)'" :legends="legendWeekly" />
         <div class="card">
           <AbnormalityGraph :groupBy="'overall'" :yearMonth="filter.date" @emit-legend="getLegendWeekly" />
         </div>
@@ -65,7 +72,7 @@
       <div class="col-12 col-lg-8">
         <AbnormalityLegend :label="'Detail Problem'" />
         <div class="card overflow-auto">
-          <AbnormalityTable :yearMonth="filter.date" />
+          <AbnormalityTable @emit-delete="triggerUpdateGraph" :yearMonth="filter.date" />
         </div>
       </div>
     </div>
@@ -101,6 +108,9 @@ export default {
     },
     getLegendShop(data) {
       this.legendShop = data
+    },
+    triggerUpdateGraph() {
+      this.filter.date = moment().format('YYYY-MM')
     }
   },
   components: {
