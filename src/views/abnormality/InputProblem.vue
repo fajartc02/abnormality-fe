@@ -33,7 +33,7 @@ export default {
         let dataMap = await this.dataMap(data.data);
 
         this.fieldsInput.push(InputModel('Line', 'option', 'Select Line', this.detailProblem?.line_id || null, dataMap, 6, false))
-        this.fieldsInput.push(InputModel('Machine / OP', 'text', 'Select Machine / OP', this.detailProblem?.machine_id || null, dataMap, 6, false))
+        this.fieldsInput.push(InputModel('Problem Loc', 'text', 'Machine / op', this.detailProblem?.problem_loc || null, null, 6, false))
       } catch (error) {
         console.log(error);
 
@@ -82,6 +82,7 @@ export default {
       }
     },
     async dataMap(payload, key = 'name') {
+      console.log('payload', payload);
       return payload.map(item => {
         return { id: item.id, label: item[key] };
       })
@@ -89,6 +90,8 @@ export default {
     async getProblemById(id) {
       try {
         const { data } = await axios.get(`${process.env.VUE_APP_API_URL}/problems/get/${id}`);
+        console.log(data.data, ': problem detail')
+
         this.detailProblem = data.data
       } catch (error) {
         this.$swal('Error', 'Error on fetch problem details', 'error')
@@ -96,6 +99,7 @@ export default {
     },
     async onSubmitInput(payload) {
       try {
+        console.log(payload)
         let obj = {
           problem_date: moment(payload.problem_date).format('YYYY-MM-DD'),
           countermeasure_date: moment(payload.countermeasure_date).format('YYYY-MM-DD'),
@@ -106,8 +110,10 @@ export default {
           status_id: 1,
           category_id: payload.category,
           countermeasure: payload.countermeasure,
-          status_id: payload.status
+          status_id: payload.status,
+          problem_loc: payload.problem_loc
         }
+        console.log(obj)
 
         await axios.post(`${process.env.VUE_APP_API_URL}/problems/add`, obj);
         this.$swal({
@@ -135,7 +141,8 @@ export default {
           department_id: payload.pic,
           category_id: payload.category,
           countermeasure: payload.countermeasure,
-          status_id: payload.status
+          status_id: payload.status,
+          problem_loc: payload.problem_loc
         }
 
         console.log(obj);
@@ -159,9 +166,13 @@ export default {
     await this.getLines();
     await this.getShifts();
     await this.getCategories();
+    const findIndexProblemDate = this.fieldsInput.findIndex(item => item.title === 'Problem Date');
+    console.log(findIndexProblemDate, ': findIndexProblemDate');
+    this.fieldsInput[findIndexProblemDate] = InputModel('Problem Date', 'date', 'Select Date', moment(this.detailProblem?.problem_date).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD'), null, 6, false)
+
     this.fieldsInput.push(InputModel('Problem', 'textarea', 'Input Problem', this.detailProblem?.problem_desc || null, null, 6, false))
     this.fieldsInput.push(InputModel('Countermeasure', 'textarea', 'Input Countermeasure', this.detailProblem?.countermeasure || null, null, 6, false))
-    this.fieldsInput.push(InputModel('Countermeasure Date', 'date', 'Select Date', this.detailProblem?.countermeasure_date.split('T')[0] || moment().format('YYYY-MM-DD'), null, 6, false))
+    this.fieldsInput.push(InputModel('Countermeasure Date', 'date', 'Select Date', moment(this.detailProblem?.countermeasure_date).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD'), null, 6, false))
     await this.getDepartments()
     await this.getStatuses()
   }
