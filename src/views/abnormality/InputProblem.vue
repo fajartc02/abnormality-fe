@@ -130,8 +130,6 @@ export default {
     },
     async onSubmitInputEdit(payload) {
       try {
-
-
         let obj = {
           problem_date: moment(payload.problem_date).format('YYYY-MM-DD'),
           countermeasure_date: moment(payload.countermeasure_date).format('YYYY-MM-DD'),
@@ -168,6 +166,7 @@ export default {
     await this.getCategories();
     const findIndexProblemDate = this.fieldsInput.findIndex(item => item.title === 'Problem Date');
     console.log(findIndexProblemDate, ': findIndexProblemDate');
+    console.log(this.detailProblem?.problem_date, ': this.detailProblem?.problem_date');
     this.fieldsInput[findIndexProblemDate] = InputModel('Problem Date', 'date', 'Select Date', moment(this.detailProblem?.problem_date).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD'), null, 6, false)
 
     this.fieldsInput.push(InputModel('Problem', 'textarea', 'Input Problem', this.detailProblem?.problem_desc || null, null, 6, false))

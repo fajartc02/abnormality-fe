@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody v-if="problems.length > 0">
-      <tr v-for="(problem, i) in problemsMapDate" :key="i">
+      <tr v-for="(problem, i) in problems" :key="i">
         <td>{{ problem.no }}</td>
         <td>{{ problem.problem_date }}</td>
         <td>{{ problem.line_nm }}</td>
@@ -68,36 +68,46 @@ export default {
       type: String,
       default: null
     },
-  },
-  computed: {
-    problemsMapDate() {
-      return this.problems.map((problem) => {
-        problem.countermeasure_date = moment(problem.countermeasure_date).format('YYYY-MM-DD')
-        problem.problem_date = moment(problem.problem_date).format('YYYY-MM-DD')
-
-        return problem
-      })
+    filter: {
+      type: Object,
+      default: null
     }
   },
   watch: {
     yearMonth() {
       this.getProblemData();
+    },
+    filter: {
+      deep: true,
+      handler() {
+        this.getProblemData(this.filter);
+      }
     }
   },
   methods: {
-    async getProblemData() {
+    async getProblemData(filter) {
       try {
         const response = await axios.get(`${process.env.VUE_APP_API_URL}/problems/get`, {
           params: {
-            yearMonth: this.yearMonth
+            yearMonth: this.yearMonth,
+            filter
           }
         })
         this.problems = response.data.data
+        await this.problemsMapDate()
       } catch (error) {
         console.log(error);
 
         this.$swal('Error', 'Error on getting table data', 'error')
       }
+    },
+    problemsMapDate() {
+      this.problems = this.problems.map((problem) => {
+        problem.countermeasure_date = moment(problem.countermeasure_date).format('YYYY-MM-DD')
+        problem.problem_date = moment(problem.problem_date).format('YYYY-MM-DD')
+
+        return problem
+      })
     },
     async getDetailsProblem(problemId) {
       try {

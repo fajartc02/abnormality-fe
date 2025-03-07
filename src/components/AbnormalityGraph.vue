@@ -43,21 +43,32 @@ export default {
     categoryId: {
       type: Number,
       default: null
+    },
+    filter: {
+      type: Object,
     }
   },
   watch: {
     yearMonth() {
       this.getGraphData();
+    },
+    filter: {
+      deep: true,
+      handler() {
+        console.log(this.filter)
+        this.getGraphData(this.filter);
+      }
     }
   },
   methods: {
-    async getGraphData() {
+    async getGraphData(filter) {
       try {
         const response = await axios.get(`${process.env.VUE_APP_API_URL}/problems/graph`, {
           params: {
             yearMonth: this.yearMonth,
             groupBy: this.groupBy,
-            categoryId: this.categoryId
+            categoryId: this.categoryId,
+            filter
           }
         })
         this.resetupChart(response.data.data.series, response.data.data);
