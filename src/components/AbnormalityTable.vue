@@ -7,6 +7,7 @@
         <th>Line</th>
         <th>Shift</th>
         <th>Kategori</th>
+        <th>Finding Lokasi</th>
         <th>Problem</th>
         <th>Countermeasure</th>
         <th>Due Date</th>
@@ -17,27 +18,28 @@
     </thead>
     <tbody v-if="problems.length > 0">
       <tr v-for="(problem, i) in problems" :key="i">
-        <td>{{ problem.no }}</td>
-        <td>{{ problem.problem_date }}</td>
-        <td>{{ problem.line_nm }}</td>
-        <td>{{ problem.shift_nm }}</td>
-        <td>{{ problem.category_nm }}</td>
-        <td>{{ problem.problem_desc }}</td>
-        <td>{{ problem.countermeasure }}</td>
-        <td>{{ problem.countermeasure_date }}</td>
-        <td>{{ problem.department_nm }}</td>
-        <td class="text-center">
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.no }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.problem_date }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.line_nm }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.shift_nm }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.category_nm }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.problem_loc }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.problem_desc }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.countermeasure }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.countermeasure_date }}</td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.department_nm }}</td>
+        <td :class="`text-center ${problem.status_id === 4 ? 'closed' : ''}`">
           <img :src="`data:image/png;base64, ${problem.img}`" alt="Tanoko image" height="30" width="30">
         </td>
-        <td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">
           <button class="btn btn-success text-light btn-sm" @click="getDetailsProblem(problem.id)">
             <i class="fas fa-eye"></i>
           </button>
         </td>
-        <td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">
           <router-link :to="`/input-problem?problem_id=${problem.id}`" class="btn btn-warning btn-sm">Edit</router-link>
         </td>
-        <td>
+        <td :class="problem.status_id === 4 ? 'closed' : ''">
           <button class="btn btn-danger text-light btn-sm" @click="deleteProblem(problem.id)">
             <i class="fas fa-trash"></i>
           </button>
@@ -46,11 +48,12 @@
     </tbody>
     <tbody v-else>
       <tr>
-        <td colspan="11" class="text-center">No data</td>
+        <td colspan="14" class="text-center">No data</td>
       </tr>
     </tbody>
   </table>
-  <!-- <AbnormalityPagination /> -->
+
+  <AbnormalityPagination @emit-pagination="(paginate) => paginateFilter = paginate" :totalPages="totalPages" />
 </template>
 <script>
 import axios from 'axios';
@@ -60,7 +63,9 @@ export default {
   name: 'AbnormalityTable',
   data() {
     return {
-      problems: []
+      problems: [],
+      totalPages: 1,
+      paginateFilter: {}
     }
   },
   props: {
@@ -82,6 +87,12 @@ export default {
       handler() {
         this.getProblemData(this.filter);
       }
+    },
+    paginateFilter: {
+      deep: true,
+      handler() {
+        this.getProblemData(this.filter);
+      }
     }
   },
   methods: {
@@ -90,14 +101,16 @@ export default {
         const response = await axios.get(`${process.env.VUE_APP_API_URL}/problems/get`, {
           params: {
             yearMonth: this.yearMonth,
-            filter
+            filter: {
+              ...filter,
+              ...this.paginateFilter
+            }
           }
         })
-        this.problems = response.data.data
+        this.problems = response?.data?.data?.data
+        this.totalPages = response?.data?.data?.totalPages
         await this.problemsMapDate()
       } catch (error) {
-        console.log(error);
-
         this.$swal('Error', 'Error on getting table data', 'error')
       }
     },
@@ -148,3 +161,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.closed {
+  background-color: #00ff6a !important
+}
+</style>

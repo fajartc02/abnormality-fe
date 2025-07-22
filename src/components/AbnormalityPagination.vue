@@ -4,36 +4,18 @@
       <CInputGroupText>
         Limit
       </CInputGroupText>
-      <select class="form-select" v-model="filter.rowPerPage">
-        <option v-for="limit in optionsPerPage" :key="limit" :value="limit">{{ limit }}</option>
+      <select class="form-select" v-model="filter.pageSize" @change="changesPagination">
+        <option v-for="limit in pageSizeOpts" :key="limit" :value="limit">{{ limit }}</option>
       </select>
     </CInputGroup>
-
-
-    <nav class="d-flex justify-content-end align-items-end" aria-label="Page navigation">
-      <ul class="pagination">
-        <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
-        </li>
-        <li class="page-item" v-if="currentPage > 2">
-          <span class="page-link">...</span>
-        </li>
-        <li class="page-item" v-for="page in visiblePages" :key="page" :class="{ active: currentPage === page }">
-          <a class="page-link" href="#" @click.prevent="changePage(page)">{{
-            page
-          }}</a>
-        </li>
-        <li class="page-item" v-if="currentPage < totalPages - 1">
-          <span class="page-link">...</span>
-        </li>
-        <li class="page-item" v-if="currentPage < totalPages" @click.prevent="changePage(totalPages)">
-          <a class="page-link" href="#">{{ totalPages }}</a>
-        </li>
-        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-          <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Next</a>
-        </li>
-      </ul>
-    </nav>
+    <CInputGroup style="width: 150px;height: 50%;">
+      <CInputGroupText>
+        Page
+      </CInputGroupText>
+      <select class="form-select" v-model="filter.page" @change="changesPagination">
+        <option v-for="page in totalPagesOpts" :key="page" :value="page">{{ page }}</option>
+      </select>
+    </CInputGroup>
   </div>
 
 
@@ -44,9 +26,16 @@ export default {
   data() {
     return {
       filter: {
-        rowPerPage: 10,
+        pageSize: 5,
+        page: 1
       },
-      optionsPerPage: [10, 25, 50, 100],
+      pageSizeOpts: [5, 20, 50, 'All'],
+      totalPagesOpts: 1
+    }
+  },
+  watch: {
+    totalPages: function () {
+      this.totalPagesOpts = this.totalPages
     }
   },
   props: {
@@ -55,49 +44,20 @@ export default {
       required: true,
       default: 1,
     },
-    currentPage: {
+    totalPages: {
       type: Number,
       required: true,
-      default: 1,
-    },
-    itemsPerPage: {
-      type: Number,
-      required: true,
-      default: 10,
-    },
-    // page, take, itemCount, pageCount, hasPreviousPage, hasNextPage
-  },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.totalData / this.itemsPerPage)
-    },
-    visiblePages() {
-      const maxVisiblePages = 5
-      const pages = []
-      let startPage = Math.max(
-        this.currentPage - Math.floor(maxVisiblePages / 2),
-        1,
-      )
-      let endPage = startPage + maxVisiblePages - 1
-
-      if (endPage > this.totalPages) {
-        endPage = this.totalPages
-        startPage = Math.max(endPage - maxVisiblePages + 1, 1)
-      }
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i)
-        // console.log(i);
-      }
-      return pages
+      default: 5,
     },
   },
   methods: {
-    changePage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.$emit('page-changed', page)
-      }
-    },
+    changesPagination() {
+      this.$emit('emit-pagination', this.filter)
+    }
   },
+  mounted() {
+    this.changesPagination()
+  }
 }
 </script>
 

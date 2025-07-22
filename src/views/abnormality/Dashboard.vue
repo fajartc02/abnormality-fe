@@ -83,49 +83,54 @@
     </div>
 
     <div class="row mt-2 mb-3">
-      <div class="col-12 col-lg-4">
-        <AbnormalityLegend :label="''" :legends="legendShop" />
-        <div class="d-flex">
-          <div class="card shadow-none w-50 align-items-center justify-content-center">
-            <h3 class="my-auto px-1">Red Tag</h3>
-          </div>
-          <div class="card shadow-none w-100 h-100 ml-1 p-0">
-            <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
-              :categoryId="1" />
-          </div>
-        </div>
-        <div class="d-flex">
-          <div class="card shadow-none mt-1 w-50 align-items-center justify-content-center">
-            <h3 class="my-auto px-1">Quality 80%</h3>
-          </div>
-          <div class="card shadow-none mt-1 w-100 h-100 ml-1 p-0">
-            <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
-              :categoryId="2" />
-          </div>
-        </div>
-        <div class="d-flex">
-          <div class="card shadow-none mt-1 w-50 align-items-center justify-content-center">
-            <h3 class="my-auto px-1">Temuan Mgt</h3>
-          </div>
-          <div class="card shadow-none mt-1 w-100 h-100 ml-1 p-0">
-            <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
-              :categoryId="3" />
-          </div>
-        </div>
-        <div class="d-flex">
-          <div class="card shadow-none mt-1 w-50 align-items-center justify-content-center">
-            <h3 class="my-auto px-1">Ergonomic & Difficulty Job</h3>
-          </div>
-          <div class="card shadow-none mt-1 w-100 h-100 ml-1 p-0">
-            <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
-              :categoryId="4" />
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-lg-8">
+      <div class="col-12 col-lg-12">
         <AbnormalityLegend :label="'Detail Problem'" />
         <div class="card overflow-auto">
           <AbnormalityTable :filter="filter" @emit-delete="triggerUpdateGraph" :yearMonth="filter.date" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2 mb-3">
+      <div class="col-12 col-lg-12">
+        <AbnormalityLegend :label="''" :legends="legendShop" />
+        <div class="row">
+          <div class="col-12 col-lg-3 mb-4">
+            <div class="card shadow-none mt-1 w-100 align-items-center justify-content-center">
+              <h5 class="my-auto px-1">Red Tag</h5>
+            </div>
+            <div class="card shadow-none mt-1 w-100 h-100 ml-1 p-0">
+              <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
+                :categoryId="1" />
+            </div>
+          </div>
+          <div class="col-12 col-lg-3 mb-4">
+            <div class="card shadow-none mt-1 w-100 align-items-center justify-content-center">
+              <h5 class="my-auto px-1">Quality 80%</h5>
+            </div>
+            <div class="card shadow-none mt-1 w-100 h-100 ml-1 p-0">
+              <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
+                :categoryId="2" />
+            </div>
+          </div>
+          <div class="col-12 col-lg-3 mb-4">
+            <div class="card shadow-none mt-1 w-100 align-items-center justify-content-center">
+              <h5 class="my-auto px-1">Temuan Mgt</h5>
+            </div>
+            <div class="card shadow-none mt-1 w-100 h-100 ml-1 p-0">
+              <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
+                :categoryId="3" />
+            </div>
+          </div>
+          <div class="col-12 col-lg-3 mb-4">
+            <div class="card shadow-none mt-1 w-100 align-items-center justify-content-center">
+              <h5 class="my-auto">Ergonomic & Difficulty Job</h5>
+            </div>
+            <div class="card shadow-none mt-1 w-100 h-100 ml-1 p-0">
+              <AbnormalityGraph :filter="filter" :groupBy="'shop'" :yearMonth="filter.date" @emit-legend="getLegendShop"
+                :categoryId="4" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
