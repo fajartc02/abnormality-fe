@@ -143,7 +143,8 @@ export default {
           category_id: payload.category,
           countermeasure: payload.countermeasure,
           status_id: payload.status,
-          problem_loc: payload.problem_loc
+          problem_loc: payload.problem_loc,
+          is_priority: payload.priority == 'PRIORITY' ? true : false
         }
 
         console.log(obj);
