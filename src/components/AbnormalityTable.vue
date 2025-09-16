@@ -12,6 +12,7 @@
         <th>Countermeasure</th>
         <th>Due Date</th>
         <th>Pic</th>
+        <th>Priority</th>
         <th>Status</th>
         <th class="text-center" colspan="3">Action</th>
       </tr>
@@ -28,6 +29,9 @@
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.countermeasure }}</td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.countermeasure_date }}</td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.department_nm }}</td>
+        <td :class="problem.status_id === 4 ? 'closed text-center' : 'text-center'">
+          <i v-if="problem.is_priority" class="fas fa-check"></i>
+        </td>
         <td :class="`text-center ${problem.status_id === 4 ? 'closed' : ''}`">
           <img :src="`data:image/png;base64, ${problem.img}`" alt="Tanoko image" height="30" width="30">
         </td>

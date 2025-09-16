@@ -22,7 +22,8 @@ export default {
         InputModel('Problem Date', 'date', 'Select Date', moment().format('YYYY-MM-DD'), null, 6, false)
       ],
       isEdit: false,
-      detailProblem: null
+      detailProblem: null,
+
     }
   },
 
@@ -76,6 +77,7 @@ export default {
         let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/statuses/get`);
         let dataMap = await this.dataMap(data.data);
         this.fieldsInput.push(InputModel('Status', 'option', 'Select Status', this.detailProblem?.status_id || '1', dataMap, 6, this.detailProblem?.status_id || false))
+        this.fieldsInput.push(InputModel('Priority', 'option', 'Select Priority', null, [{ id: 'PRIORITY', label: 'PRIORITY' }, { id: 'NON PRIORITY', label: 'NON PRIORITY' }], 12, false))
         // this.fieldsInput.push(InputModel('Ilustration', 'file', 'Select Ilustration', this.detailProblem?.ilustration || '', dataMap, 6, this.detailProblem?.ilustration || false))
       } catch (error) {
         this.$swal('Error', 'Error on fetch shifts', 'error')
@@ -111,7 +113,8 @@ export default {
           category_id: payload.category,
           countermeasure: payload.countermeasure,
           status_id: payload.status,
-          problem_loc: payload.problem_loc
+          problem_loc: payload.problem_loc,
+          is_priority: payload.priority == 'PRIORITY' ? true : false
         }
         console.log(obj)
 
