@@ -36,7 +36,8 @@
           <img :src="`data:image/png;base64, ${problem.img}`" alt="Tanoko image" height="30" width="30">
         </td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">
-          <button class="btn btn-success text-light btn-sm" @click="getDetailsProblem(problem.id)">
+          <button class="btn btn-success text-light btn-sm" @click="getDetailsProblem(problem.image)"
+            :disabled="!problem.image">
             <i class="fas fa-eye"></i>
           </button>
         </td>
@@ -63,13 +64,16 @@
 import axios from 'axios';
 import AbnormalityPagination from './AbnormalityPagination.vue'
 import moment from 'moment';
+
 export default {
   name: 'AbnormalityTable',
   data() {
     return {
       problems: [],
       totalPages: 1,
-      paginateFilter: {}
+      paginateFilter: {},
+      selectedImg: null,
+      imageModal: false
     }
   },
   props: {
@@ -126,11 +130,11 @@ export default {
         return problem
       })
     },
-    async getDetailsProblem(problemId) {
+    async getDetailsProblem(imagePath) {
       try {
-        alert('Under development :)')
+        this.$emit('emit-modal', imagePath)
       } catch (error) {
-
+        console.log(error);
       }
     },
     async deleteProblem(id) {

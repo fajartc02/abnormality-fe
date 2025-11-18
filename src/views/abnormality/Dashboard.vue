@@ -86,7 +86,8 @@
       <div class="col-12 col-lg-12">
         <AbnormalityLegend :label="'Detail Problem'" />
         <div class="card overflow-auto">
-          <AbnormalityTable :filter="filter" @emit-delete="triggerUpdateGraph" :yearMonth="filter.date" />
+          <AbnormalityTable :filter="filter" @emit-delete="triggerUpdateGraph" :yearMonth="filter.date"
+            @emit-modal="openModal" />
         </div>
       </div>
     </div>
@@ -135,6 +136,15 @@
       </div>
     </div>
   </div>
+  <!-- CModal -->
+  <CModal scrollable size="xl" :visible="imageModal" @close="() => { imageModal = false }">
+    <CModalHeader>
+      <CModalTitle>Problem Details</CModalTitle>
+    </CModalHeader>
+    <CModalBody>
+      <img :src="selectedImg" alt="gambar" width="100%">
+    </CModalBody>
+  </CModal>
 </template>
 <script>
 import moment from 'moment';
@@ -165,10 +175,16 @@ export default {
       shiftsOpts: [],
       categoriesOpts: [],
       statusesOpts: [],
-      departementsOpts: []
+      departementsOpts: [],
+      selectedImg: null,
+      imageModal: false
     }
   },
   methods: {
+    openModal(data) {
+      this.selectedImg = data
+      this.imageModal = true
+    },
     getLegendWeekly(data) {
       this.legendWeekly = data
     },

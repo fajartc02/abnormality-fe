@@ -23,7 +23,6 @@ export default {
       ],
       isEdit: false,
       detailProblem: null,
-
     }
   },
 
@@ -102,7 +101,7 @@ export default {
     },
     async onSubmitInput(payload) {
       try {
-        console.log(payload)
+
         let obj = {
           problem_date: moment(payload.problem_date).format('YYYY-MM-DD'),
           countermeasure_date: moment(payload.countermeasure_date).format('YYYY-MM-DD'),
@@ -115,11 +114,17 @@ export default {
           countermeasure: payload.countermeasure,
           status_id: payload.status,
           problem_loc: payload.problem_loc,
-          is_priority: payload.priority == 'PRIORITY' ? true : false
+          is_priority: payload.priority == 'PRIORITY' ? true : false,
+          image: payload.image
         }
-        console.log(obj)
 
-        await axios.post(`${process.env.VUE_APP_API_URL}/problems/add`, obj);
+        // convert to formData
+        let formData = new FormData();
+        for (let key in obj) {
+          formData.append(key, obj[key]);
+        }
+
+        await axios.post(`${process.env.VUE_APP_API_URL}/problems/add`, formData);
         this.$swal({
           icon: 'success',
           title: 'Success',
@@ -145,14 +150,22 @@ export default {
           countermeasure: payload.countermeasure,
           status_id: payload.status,
           problem_loc: payload.problem_loc,
-          is_priority: payload.priority == 'PRIORITY' ? true : false
+          is_priority: payload.priority == 'PRIORITY' ? true : false,
+          image: payload.image
         }
-
-        console.log(obj);
-
-        await axios.put(`${process.env.VUE_APP_API_URL}/problems/edit/${this.$route.query.problem_id}`, obj);
+        // convert to formData
+        const formData = new FormData();
+        for (const key in obj) {
+          if (obj[key] == null) continue
+          formData.append(key, obj[key]);
+        }
+        await axios.put(`${process.env.VUE_APP_API_URL}/problems/edit/${this.$route.query.problem_id}`, formData);
         this.$swal('Success', 'Success to edit problem', 'success')
         this.$router.push('/')
+
+        // await axios.put(`${process.env.VUE_APP_API_URL}/problems/edit/${this.$route.query.problem_id}`, obj);
+        // this.$swal('Success', 'Success to edit problem', 'success')
+        // this.$router.push('/')
       } catch (error) {
         this.$swal('Error', 'Error to edit problem', 'error')
       }
@@ -177,8 +190,11 @@ export default {
     this.fieldsInput.push(InputModel('Problem', 'textarea', 'Input Problem', this.detailProblem?.problem_desc || null, null, 6, false))
     this.fieldsInput.push(InputModel('Countermeasure', 'textarea', 'Input Countermeasure', this.detailProblem?.countermeasure || null, null, 6, false))
     this.fieldsInput.push(InputModel('Countermeasure Date', 'date', 'Select Date', moment(this.detailProblem?.countermeasure_date).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD'), null, 6, false))
+
     await this.getDepartments()
     await this.getStatuses()
+
+    this.fieldsInput.push(InputModel('Image', 'file', 'Upload Image', null, null, 6, false))
   }
 }
 </script>

@@ -2,8 +2,15 @@
   <div class="card p-2" style="z-index: 1;font-size: 20px;">
     <CRow v-if="fieldsInput.length > 0" class="align-items-start">
       <CCol class="mt-1" v-for="(field, i) in fieldsInput" :key="i" :md="field.size ? field.size : 3" sm="12">
-        <template v-if="field.type !== 'option' && field.type !== 'treeselect' && field.type !== 'textarea'">
+
+        <template
+          v-if="field.type !== 'option' && field.type !== 'treeselect' && field.type !== 'textarea' && field.type !== 'file'">
           <CFormInput size="lg" v-model="field.value" :type="field.type" :label="field.title"
+            :placeholder="field.placeholder" :disabled="field.disabled" />
+        </template>
+        <template v-else-if="field.type === 'file'">
+          {{ field.type }}
+          <CFormInput @change="onChangeFile($event)" size="lg" :type="field.type" :label="field.title"
             :placeholder="field.placeholder" :disabled="field.disabled" />
         </template>
         <template v-else>
@@ -18,6 +25,8 @@
             <label class="form-label">{{ field.title }}</label>
             <Treeselect size="lg" v-model="field.value" :options="field.options" :clearable="true" />
           </div>
+          <!-- <CFormInput ref="img_input" v-else-if="field.type === 'file'" :label="field.title"
+            aria-label="Input your kaizen file" type="file" /> -->
           <!-- <div v-else-if="field.type === 'button'" class="d-flex justify-content-between">
             <button v-for="btn in field.options" :key="btn" class="btn btn-primary" @click="emitInput(field, btn)"></button>
           </div> -->
@@ -46,7 +55,9 @@ export default {
   name: 'InputComp',
   data() {
     return {
-      form: {}
+      form: {},
+      imgFile: null,
+      formData: new FormData()
     }
   },
   watch: {
@@ -54,14 +65,24 @@ export default {
       deep: true,
       handler: function () {
         if (this.fieldsInput.length > 0) {
-          for (let i = 0; i < this.fieldsInput.length; i++) {
-            const isValidDate = moment(this.fieldsInput[i].value, 'YYYY-MM-DD', true).isValid();
-            if (isValidDate) {
-              this.form[FN_CASE_CONVERTER.toSnakeCase(this.fieldsInput[i].title.replace(/\s/g, ""))] = moment(this.fieldsInput[i].value).format('YYYY-MM-DD')
-            } else {
-              this.form[FN_CASE_CONVERTER.toSnakeCase(this.fieldsInput[i].title.replace(/\s/g, ""))] = this.fieldsInput[i].value
+
+          for (const field of this.fieldsInput) {
+            const key = FN_CASE_CONVERTER.toSnakeCase(field.title.replace(/\s/g, ""));
+            const { type, value } = field;
+
+            let finalValue = value;
+            if (moment(value, 'YYYY-MM-DD', true).isValid()) {
+              finalValue = moment(value).format('YYYY-MM-DD');
             }
+
+            if (type === 'file') {
+              finalValue = this.imgFile
+            }
+
+            this.form[key] = finalValue;
           }
+          // this.form = formData
+          // console.log(formData);
           if (this.isEmit) this.$emit('emit-input', this.form)
         }
       }
@@ -144,6 +165,14 @@ export default {
   },
   components: {
     Treeselect
+  },
+  methods: {
+    onChangeFile(event) {
+      // changes index value in fields input when type file
+      // console.log(event.target.files[0]);
+      this.form.image = event.target.files[0]
+      // this.form[event.target.name] = event.target.files
+    },
   }
 }
 </script>
