@@ -9,7 +9,9 @@
         <th>Kategori</th>
         <th>Finding Lokasi</th>
         <th>Problem</th>
+        <th>Picture (before)</th>
         <th>Countermeasure</th>
+        <th>Picture (after)</th>
         <th>Due Date</th>
         <th>Pic</th>
         <th>Priority</th>
@@ -26,7 +28,17 @@
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.category_nm }}</td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.problem_loc }}</td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.problem_desc }}</td>
+        <td :class="problem.status_id === 4 ? 'closed text-center' : 'text-center'">
+          <img v-if="problem.image" :src="problem.image" width="100" @click="getDetailsProblem(problem.image)"
+            alt="img_problem" style="cursor: pointer;">
+          <small v-else>-</small>
+        </td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.countermeasure }}</td>
+        <td :class="problem.status_id === 4 ? 'closed text-center' : 'text-center'">
+          <img v-if="problem.image_cm" :src="problem.image_cm" width="100" @click="getDetailsProblem(problem.image_cm)"
+            alt="image_cm" style="cursor: pointer;">
+          <small v-else>-</small>
+        </td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.countermeasure_date }}</td>
         <td :class="problem.status_id === 4 ? 'closed' : ''">{{ problem.department_nm }}</td>
         <td :class="problem.status_id === 4 ? 'closed text-center' : 'text-center'">

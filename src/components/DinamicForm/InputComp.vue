@@ -10,8 +10,8 @@
         </template>
         <template v-else-if="field.type === 'file'">
           {{ field.type }}
-          <CFormInput @change="onChangeFile($event)" size="lg" :type="field.type" :label="field.title"
-            :placeholder="field.placeholder" :disabled="field.disabled" />
+          <CFormInput @change="($event) => onChangeFile($event, field.title)" size="lg" :type="field.type"
+            :label="field.title" :placeholder="field.placeholder" :disabled="field.disabled" />
         </template>
         <template v-else>
           <CFormTextarea size="lg" v-if="field.type === 'textarea'" v-model="field.value" :label="field.title"
@@ -167,10 +167,15 @@ export default {
     Treeselect
   },
   methods: {
-    onChangeFile(event) {
+    onChangeFile(event, title) {
+      console.log(event.target.files);
+      console.log(title);
+      console.log(FN_CASE_CONVERTER.toSnakeCase(title.replace(/\s/g, "")));
+      this.form[FN_CASE_CONVERTER.toSnakeCase(title.replace(/\s/g, ""))] = event.target.files[0]
+
       // changes index value in fields input when type file
       // console.log(event.target.files[0]);
-      this.form.image = event.target.files[0]
+      // this.form.image = event.target.files[0]
       // this.form[event.target.name] = event.target.files
     },
   }

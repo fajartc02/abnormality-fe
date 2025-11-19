@@ -115,7 +115,8 @@ export default {
           status_id: payload.status,
           problem_loc: payload.problem_loc,
           is_priority: payload.priority == 'PRIORITY' ? true : false,
-          image: payload.image
+          image: payload.image,
+          image_cm: payload.image_cm
         }
 
         // convert to formData
@@ -151,21 +152,22 @@ export default {
           status_id: payload.status,
           problem_loc: payload.problem_loc,
           is_priority: payload.priority == 'PRIORITY' ? true : false,
-          image: payload.image
+          image: payload.image,
+          image_cm: payload.image_cm
         }
+        // console.log(payload);
         // convert to formData
         const formData = new FormData();
         for (const key in obj) {
           if (obj[key] == null) continue
           formData.append(key, obj[key]);
         }
+        setTimeout(() => {
+          console.log(formData);
+        }, 2000);
         await axios.put(`${process.env.VUE_APP_API_URL}/problems/edit/${this.$route.query.problem_id}`, formData);
         this.$swal('Success', 'Success to edit problem', 'success')
         this.$router.push('/')
-
-        // await axios.put(`${process.env.VUE_APP_API_URL}/problems/edit/${this.$route.query.problem_id}`, obj);
-        // this.$swal('Success', 'Success to edit problem', 'success')
-        // this.$router.push('/')
       } catch (error) {
         this.$swal('Error', 'Error to edit problem', 'error')
       }
@@ -195,6 +197,7 @@ export default {
     await this.getStatuses()
 
     this.fieldsInput.push(InputModel('Image', 'file', 'Upload Image', null, null, 6, false))
+    this.fieldsInput.push(InputModel('Image CM', 'file', 'Upload Image', null, null, 6, false))
   }
 }
 </script>
