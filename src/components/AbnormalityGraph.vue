@@ -69,6 +69,9 @@ export default {
             groupBy: this.groupBy,
             categoryId: this.categoryId,
             filter
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         this.resetupChart(response.data.data.series, response.data.data);

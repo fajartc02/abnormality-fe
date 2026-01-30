@@ -204,42 +204,55 @@ export default {
     },
     async getLines() {
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/lines/get`);
+        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/lines/get`, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         let dataMap = await this.dataMap(data.data);
 
         this.linesOpts = dataMap
       } catch (error) {
-        console.log(error);
         this.$swal('Error', 'Error on fetch lines', 'error')
       }
     },
     async getShifts() {
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/shifts/get`);
+        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/shifts/get`, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         let dataMap = await this.dataMap(data.data);
 
         this.shiftsOpts = dataMap
       } catch (error) {
-        console.log(error);
 
         this.$swal('Error', 'Error on fetch shifts', 'error')
       }
     },
     async getCategories() {
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/categories/get`);
+        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/categories/get`, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         let dataMap = await this.dataMap(data.data);
 
         this.categoriesOpts = dataMap
       } catch (error) {
-        console.log(error);
 
         this.$swal('Error', 'Error on fetch shifts', 'error')
       }
     },
     async getStatuses() {
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/statuses/get`);
+        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/statuses/get`, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         let dataMap = await this.dataMap(data.data);
 
         this.statusesOpts = dataMap
@@ -249,7 +262,11 @@ export default {
     },
     async getDepartments() {
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/departments/get`);
+        let { data } = await axios.get(`${process.env.VUE_APP_API_URL}/departments/get`, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         let dataMap = await this.dataMap(data.data);
 
         this.departementsOpts = dataMap
@@ -257,6 +274,22 @@ export default {
         this.$swal('Error', 'Error on fetch shifts', 'error')
       }
     },
+    async checkAuth() {
+      try {
+        await axios.post(`${process.env.VUE_APP_API_URL}/auth/verify`, null, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        this.getLines()
+        this.getShifts()
+        this.getCategories()
+        this.getStatuses()
+        this.getDepartments()
+      } catch (error) {
+        this.$router.push('/login')
+      }
+    }
   },
   components: {
     AbnormalityGraph,
@@ -264,11 +297,7 @@ export default {
     AbnormalityLegend
   },
   mounted() {
-    this.getLines()
-    this.getShifts()
-    this.getCategories()
-    this.getStatuses()
-    this.getDepartments()
+    this.checkAuth()
   }
 }
 </script>

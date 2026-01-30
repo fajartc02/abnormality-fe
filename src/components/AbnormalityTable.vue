@@ -125,6 +125,9 @@ export default {
               ...filter,
               ...this.paginateFilter
             }
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         this.problems = response?.data?.data?.data
@@ -162,7 +165,11 @@ export default {
         })
           .then(async (result) => {
             if (result.isConfirmed) {
-              await axios.delete(`${process.env.VUE_APP_API_URL}/problems/delete/${id}`);
+              await axios.delete(`${process.env.VUE_APP_API_URL}/problems/delete/${id}`, {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+              });
               this.getProblemData();
               this.$emit('emit-delete', id)
               this.$swal('Deleted!', 'Problem has been deleted.', 'success')

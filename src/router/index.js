@@ -18,11 +18,11 @@ const routes = [
         : DefaultLayout,
     redirect:
       process.env.VUE_APP_STANDALONE_SINGLE_SPA !== 'true' &&
-      (!localStorage.id_token || localStorage.id_token == '')
+        (!localStorage.id_token || localStorage.id_token == '')
         ? () => {
-            window.location.href = process.env.dc + '/#/sc/login'
-            // return '/redirectingToLogin' // not important since redirecting
-          }
+          window.location.href = process.env.dc + '/#/sc/login'
+          // return '/redirectingToLogin' // not important since redirecting
+        }
         : '/dashboard',
     children: [
       {
@@ -38,6 +38,11 @@ const routes = [
 
       /*define other in here*/
     ],
+  },
+  {
+    path: '/login',
+    name: 'LoginPage',
+    component: () => import('@/views/abnormality/LoginPage.vue'),
   },
   {
     path: '/404',
